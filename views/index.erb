@@ -1,0 +1,14 @@
+<div id="documents" data-bind="css: { hidden: mode() == 'edit' }">
+    <div class="controls">
+        <ul class="directory" data-bind="foreach: documents">
+            <li>
+                <a href="#" class="title" data-bind="text: title, click: $root.open"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="content" data-bind="with: activeDocument">
+    <p id="title" data-bind="text: title" contenteditable="true"></p>
+    <p id="document" data-bind="event: { keyup: $root.save }" contenteditable="true"></p>
+</div>

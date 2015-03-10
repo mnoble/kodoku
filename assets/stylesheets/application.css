@@ -1,0 +1,106 @@
+* {
+  outline: 0;
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #F0F0F0;
+  font: 16px 'PT Sans', Helvetica, Arial, sans-serif;
+}
+
+#documents {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  min-height: 2000px; /* Ensure it extends the screen on render */
+  background: #EAEAEA;
+  transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+#documents.hidden {
+  opacity: 0;
+}
+
+#documents .controls {
+  margin-top: 150px;
+}
+
+#documents .controls .new {
+  float: right;
+  background: #DADADA;
+  padding: 0 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #FAFAFA;
+  border: none;
+  margin: 0 10px 10px 0;
+}
+
+#documents .controls .new:hover {
+  background: #D6D6D6;
+  color: #FAFAFA;
+  cursor: pointer;
+}
+
+#documents .controls .new:active {
+  background: #D0D0D0;
+  color: #F0F0F0;
+}
+
+#documents .directory {
+  clear: both;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #E0E0E0;
+}
+
+#documents .directory li {
+  border-bottom: 1px solid #E0E0E0;
+  padding: 10px;
+}
+
+#documents .directory li .title {
+  margin: 0;
+  padding: 0;
+  color: #999999;
+}
+
+#documents .directory li .remove {
+    float: right;
+    background: rgba(255, 0, 0, 0.1);
+    padding: 0 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F6F6F6;
+}
+
+#content {
+  width: 40%;
+  margin: 100px auto 0 auto;
+  font: 20px 'Source Code Pro', Monaco, monospace;
+}
+
+#title {
+  padding: 5px 0;
+  font-size: 24px 'PT Sans', Helvetica, Arial, sans-serif;
+  color: #DDDDDD;
+  transition: color 0.5s;
+  -webkit-transition: color 0.5s;
+  -moz-transition: color 0.5s;
+  -o-transition: color 0.5s;
+}
+
+#title:focus {
+  color: #666666;
+}
+
+#document {
+  color: #666666;
+}
+
