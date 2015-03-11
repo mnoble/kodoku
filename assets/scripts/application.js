@@ -11,16 +11,11 @@
             return new Document(document.title, document.content);
         }));
 
-        this.mode = ko.observable("normal");
-        this.modeTimeout = null;
-
-        this.lastActiveDocument = this.documents()[0];
-
         /* Event Handlers */
 
-        this.mouseDidMove = function () {
+        $(document).on("mousemove", function (event) {
             this.enableNormalMode();
-        };
+        }.bind(this));
 
         /* Modes */
 
@@ -29,6 +24,7 @@
 
             clearTimeout(this.modeTimeout);
 
+            // Fade out the UI after 2 seconds of no mouse use.
             this.modeTimeout = setTimeout(function () {
                 this.enableEditMode();
             }.bind(this), 2000);
@@ -43,44 +39,51 @@
         this.open = function (document) {
             this.lastActiveDocument = this.activeDocument();
             this.activeDocument(document);
-            $("#document").html(this.activeDocument().content());
+            $("#document").html(document.content());
         }.bind(this);
 
-        this.save = function (document, event) {
-            document.content(event.target.innerHTML);
+        this.save = function (document) {
+            document.title($("#title").text());
+            document.content($("#document").html());
         };
 
         this.newDocument = function () {
             var document = new Document();
-            this.activeDocument(document);
             this.documents.push(document);
+            this.open(document);
         }.bind(this);
 
-        this.removeDocument = function (document) {
-            this.documents.remove(document);
+        this.removeDocument = function () {
+            this.documents.remove(this.activeDocument());
             this.activeDocument(this.lastActiveDocument);
         }.bind(this);
 
+        // Knockout watches changes to models and stores them in localStorage when
+        // they change. The rate limit ensures Knockout only does that once every
+        // quarter of a second.
+        //
         ko.computed(function () {
             localStorage.setItem(LOCAL_STORAGE_KEY, ko.toJSON(this.documents));
         }.bind(this)).extend({
             rateLimit: { timeout: 250, method: "notifyWhenChangesStop" }
         });
 
-        /* Event Bindings */
+        /* Key Stroke Routing */
 
-        $(document).on("mousemove", function (event) {
-            this.mouseDidMove(event);
-        }.bind(this));
-
-        $(document).on("keypress", function (event) {
-            this.keyDidPress(event);
-        }.bind(this));
+        App.Util.KeyRouter.register("ctrl+backspace", "removeDocument");
+        App.Util.KeyRouter.register("ctrl+n", "newDocument");
+        App.Util.KeyRouter.listen(this);
 
         /* Initialization */
 
-        this.activeDocument = ko.observable(this.lastActiveDocument);
+        this.mode = ko.observable("normal");
+        this.modeTimeout = null;
+
+        this.lastActiveDocument = this.documents()[0];
+        this.activeDocument     = ko.observable(this.lastActiveDocument);
+
         this.open(this.activeDocument());
+
         this.enableNormalMode();
     };
 

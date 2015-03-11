@@ -4,16 +4,14 @@
     <title>Kodoku</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js" type="text/javascript" charset="utf-8"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">App = { Util: {} };</script>
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
     <%= yield %>
-    <script src="/scripts/key-router.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/key-controller.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/document.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/view-model.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/util/key-router.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

@@ -9,6 +9,6 @@
 </div>
 
 <div id="content" data-bind="with: activeDocument">
-    <p id="title" data-bind="text: title" contenteditable="true"></p>
+    <p id="title" data-bind="text: title, event: { keyup: $root.save }" contenteditable="true"></p>
     <p id="document" data-bind="event: { keyup: $root.save }" contenteditable="true"></p>
 </div>
