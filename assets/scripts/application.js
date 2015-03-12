@@ -1,15 +1,34 @@
 (function($, ko) {
     var LOCAL_STORAGE_KEY = "kodoku";
 
-    var Document = function (title, content) {
+    var Document = function (title, content, uuid) {
         this.title    = ko.observable(title || "Untitled Document");
-        this.content  = ko.observable(content);
+        this.content  = ko.observable(content || "");
+        this.uuid     = uuid || App.Util.uuid();
     };
 
-    var ViewModel = function (documents) {
+    var ViewModel = function (documents, activeDocument) {
+        this.activeDocument = ko.observable();
+        this.mode           = ko.observable("normal");
+
+        if (!activeDocument) {
+            activeDocument = documents[0];
+        }
+
         this.documents = ko.observableArray(documents.map(function (document) {
-            return new Document(document.title, document.content);
+            return new Document(document.title, document.content, document.uuid);
         }));
+
+        // Reload last active document
+        ko.utils.arrayForEach(this.documents(), function (document) {
+            if (document.uuid == activeDocument.uuid) {
+                this.activeDocument(document);
+            }
+        }.bind(this));
+
+        if (!this.activeDocument()) {
+            this.activeDocument(this.documents()[0]);
+        }
 
         /* Event Handlers */
 
@@ -63,7 +82,10 @@
         // quarter of a second.
         //
         ko.computed(function () {
-            localStorage.setItem(LOCAL_STORAGE_KEY, ko.toJSON(this.documents));
+            localStorage.setItem(LOCAL_STORAGE_KEY, ko.toJSON({
+                activeDocument: this.activeDocument(),
+                documents:      this.documents
+            }));
         }.bind(this)).extend({
             rateLimit: { timeout: 250, method: "notifyWhenChangesStop" }
         });
@@ -76,19 +98,13 @@
 
         /* Initialization */
 
-        this.mode = ko.observable("normal");
         this.modeTimeout = null;
-
-        this.lastActiveDocument = this.documents()[0];
-        this.activeDocument     = ko.observable(this.lastActiveDocument);
-
         this.open(this.activeDocument());
-
         this.enableNormalMode();
     };
 
-    var documents = ko.utils.parseJson(localStorage.getItem(LOCAL_STORAGE_KEY));
-    var viewModel = new ViewModel(documents || [new Document()]);
+    var data      = ko.utils.parseJson(localStorage.getItem(LOCAL_STORAGE_KEY));
+    var viewModel = new ViewModel(data.documents || [new Document()], data.activeDocument);
 
     ko.applyBindings(viewModel);
 })(Zepto, ko);
