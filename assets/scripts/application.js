@@ -88,7 +88,7 @@
     };
 
     var documents = ko.utils.parseJson(localStorage.getItem(LOCAL_STORAGE_KEY));
-    var viewModel = new ViewModel(documents || []);
+    var viewModel = new ViewModel(documents || [new Document()]);
 
     ko.applyBindings(viewModel);
 })(Zepto, ko);
